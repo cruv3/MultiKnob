@@ -1,5 +1,6 @@
 package controler.multiknobcontroller
 
+import android.app.AlertDialog
 import android.app.AppOpsManager
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
 
         if(bluetoothAllowed && locationAllowed){
-            startMapActivity()
+            askUserChoice()
         }
     }
 
@@ -52,16 +53,37 @@ class MainActivity : AppCompatActivity() {
             PermissionUtils.LOCATION_PERMISSION_REQUEST_CODE -> {
                 locationAllowed = true
                 if(bluetoothAllowed && locationAllowed){
-                    startMapActivity()
+                    askUserChoice()
                 }
             }
             PermissionUtils.BLUETOOTH_PERMISSION_REQUEST_CODE -> {
                 bluetoothAllowed = true
                 if(bluetoothAllowed && locationAllowed){
-                    startMapActivity()
+                    askUserChoice()
                 }
             }
         }
+    }
+
+    private fun askUserChoice(){
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Select Mode")
+        builder.setMessage("Please choose a mode to proceed:")
+
+        // Add options for Studie and Proof of Concept
+        builder.setPositiveButton("Studie") { dialog, _ ->
+            startMapActivity()
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Proof of Concept") { dialog, _ ->
+            startAccessibilityService()
+            dialog.dismiss()
+        }
+
+        // Create and show the dialog
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 
 

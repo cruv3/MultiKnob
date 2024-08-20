@@ -1,41 +1,32 @@
 [versions]
 agp = "8.5.2"
-mapBox = "11.5.1"
 app = "1.4.0"
-kotlin = "1.9.0"
-coreKtx = "1.13.1"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"  # Make sure this matches espressoCoreVersion
-lifecycleRuntimeKtx = "2.8.4"
-activityCompose = "1.9.1"
 composeBom = "2024.06.00"
+mapBox = "11.5.1"
 appcompat = "1.7.0"
-mapsCompose = "11.5.1"
-maps = "3.1.0-beta"
+kotlin = "1.9.0"
+mapboxSdkServices = "6.0.0"
+mapsCompose = "11.6.0"
+playServicesLocation = "21.3.0"
+
+
+
 
 
 [libraries]
-mapBox = { module = "com.mapbox.maps:android", version.ref = "mapBox" }
 androidx-app = { module = "androidx.car.app:app", version.ref = "app" }
-
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }  # Correct version used here
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+mapBox = { module = "com.mapbox.maps:android", version.ref = "mapBox" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-ui = { module = "androidx.compose.ui:ui" }
+androidx-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+mapbox-sdk-services = { module = "com.mapbox.mapboxsdk:mapbox-sdk-services", version.ref = "mapboxSdkServices" }
 maps-compose = { module = "com.mapbox.extension:maps-compose", version.ref = "mapsCompose" }
-maps = { group = "com.google.android.libraries.maps", name = "maps", version.ref = "maps" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+
 
 
 [plugins]

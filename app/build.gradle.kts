@@ -50,29 +50,17 @@ android {
 }
 
 dependencies {
-
-
-    //implementation(libs.androidx.core.ktx)
-    //implementation(libs.androidx.lifecycle.runtime.ktx)
-    //implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    //implementation(libs.androidx.ui)
-    //implementation(libs.androidx.ui.graphics)
-//    implementation(libs.androidx.ui.tooling.preview)
-//    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.play.services.location)
+    debugImplementation(libs.androidx.ui.tooling)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
     implementation(libs.androidx.appcompat)
-//    implementation(libs.maps)
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
-//    androidTestImplementation(libs.androidx.espresso.core)
-//    androidTestImplementation(platform(libs.androidx.compose.bom))
-//    androidTestImplementation(libs.androidx.ui.test.junit4)
-//    debugImplementation(libs.androidx.ui.tooling)
-//    debugImplementation(libs.androidx.ui.test.manifest)
-
-    implementation(libs.androidx.app)
-    // Add Mapbox Maps SDK
     implementation(libs.mapBox)
-//    implementation(libs.maps.compose)
-//    implementation("androidx.test.espresso:espresso-core:3.6.1")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.app)
+    implementation(libs.mapbox.sdk.services)
+    implementation(libs.maps.compose)
+
 }

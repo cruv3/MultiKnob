@@ -3,8 +3,8 @@ package controler.multiknobcontroller.utils
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import controler.multiknobcontroller.controls.Controller
-import controler.multiknobcontroller.controls.NodeManager
+import controler.multiknobcontroller.prototype.controls.NodeManager
+import controler.multiknobcontroller.utils.entities.GlobalState
 
 fun <T> delayFunction(delayMs: Long, nodeManager: NodeManager, log: String, action: (T) -> Unit): (T) -> Unit {
     val handler = Handler(Looper.getMainLooper())
@@ -12,9 +12,23 @@ fun <T> delayFunction(delayMs: Long, nodeManager: NodeManager, log: String, acti
         if (!nodeManager.isNavigating()){
             nodeManager.setNavigating(true)
             handler.postDelayed ({
-                Log.d(Controller.TAG, log)
+                Log.d(controler.multiknobcontroller.prototype.controls.Controller.TAG, log)
                 action(param)
                 nodeManager.setNavigating(false)
+            },delayMs)
+        }
+    }
+}
+
+fun <T> delayFunction(delayMs: Long, tag: String, log: String, action: (T) -> Unit): (T) -> Unit {
+    val handler = Handler(Looper.getMainLooper())
+    return { param : T ->
+        if (!GlobalState.isNavigating){
+            GlobalState.isNavigating = true
+            handler.postDelayed ({
+                Log.d(tag, log)
+                action(param)
+                GlobalState.isNavigating = false
             },delayMs)
         }
     }
@@ -33,7 +47,7 @@ fun <T> delayFunctionWithCallback(
         if (!nodeManager.isNavigating()) {
             nodeManager.setNavigating(true)
             handler.postDelayed({
-                Log.d(Controller.TAG, log)
+                Log.d(controler.multiknobcontroller.prototype.controls.Controller.TAG, log)
                 action(param)
                 handler.postDelayed({
                     callback()
