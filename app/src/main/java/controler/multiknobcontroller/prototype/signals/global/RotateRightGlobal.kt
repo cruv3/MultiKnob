@@ -5,6 +5,7 @@ import controler.multiknobcontroller.utils.entities.MultiKnob
 import controler.multiknobcontroller.utils.entities.Signal
 import controler.multiknobcontroller.prototype.signals.SignalBlocker
 import controler.multiknobcontroller.prototype.signals.SignalProcessor
+import controler.multiknobcontroller.utils.entities.GlobalState
 
 
 class RotateRightGlobal(private val tag: String) {
@@ -15,14 +16,9 @@ class RotateRightGlobal(private val tag: String) {
     private var TAG_NEW = tag + TAG_PRESET
 
     fun globalInteraction(multiKnob: MultiKnob, callback: SignalProcessor.SignalCallback){
-        if(multiKnob.rotation >= 60 && multiKnob.fingerCount == 5){
-            if(!SignalBlocker.isSignalBlocked(Signal.GlobalSignal.OPEN_GOOGLE_MAPS)){
-                Log.d(TAG_NEW, "Opening Google Maps")
-                callback.onSignalReceived(Signal.GlobalSignal.OPEN_GOOGLE_MAPS)
-            }
-        }
+        if(multiKnob.snapPoint != 1) return
 
-        if(multiKnob. rotation >= 25 && multiKnob.fingerCount == 2){
+        if(multiKnob.fingerCount == 4){
             if(!SignalBlocker.isSignalBlocked(Signal.GlobalSignal.RIGHT)){
                 Log.d(TAG_NEW, "Right")
                 callback.onSignalReceived(Signal.GlobalSignal.RIGHT)

@@ -7,17 +7,14 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.graphics.drawable.shapes.RectShape
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
 import com.mapbox.maps.ScreenCoordinate
 import controler.multiknobcontroller.utils.entities.CityWrapper
-import kotlin.math.abs
 
 object HandleCities {
     private const val TAG = "GenerateBorder"
@@ -25,7 +22,6 @@ object HandleCities {
 
     private const val TOTAL_SEGMENTS = 8
     private const val CENTER_SEGMENT_INDEX = 4
-
 
     fun setupCities(mapView: MapView, cityWrappers: MutableList<CityWrapper>, centerCoordinate: ScreenCoordinate, rootLayout: FrameLayout, context: Context): MutableList<MutableList<CityWrapper>> {
         val segments = MutableList(TOTAL_SEGMENTS) { mutableListOf<CityWrapper>() }
@@ -61,6 +57,15 @@ object HandleCities {
         }
 
         return segments
+    }
+
+    fun highlitedCity(cityWrappers: MutableList<MutableList<CityWrapper>>): CityWrapper? {
+        cityWrappers.forEach { first ->
+            first.forEach { second ->
+                if(second.isHighlighted) return second
+            }
+        }
+        return null
     }
 
     private fun calculateCitySegment(
@@ -222,15 +227,15 @@ object HandleCities {
                 }
             }
 
-            if (city.steps != null) {
-                val stepIndicator = addStepIndicator(city.steps!!,rootLayout, context)
-                indicatorLayout.addView(stepIndicator)
-            }
-
-            if (city.angle != null) {
-                val arrowIndicator = addArrowIndicator(city.angle!!, rootLayout, context)
-                indicatorLayout.addView(arrowIndicator)
-            }
+//            if (city.steps != null) {
+//                //val stepIndicator = addStepIndicator(city.steps!!,rootLayout, context)
+//                //indicatorLayout.addView(stepIndicator)
+//            }
+//
+//            if (city.angle != null) {
+//                val arrowIndicator = addArrowIndicator(city.angle!!, rootLayout, context)
+//                indicatorLayout.addView(arrowIndicator)
+//            }
             cityOverlay.addView(indicatorLayout)
         }
         rootLayout.addView(cityOverlay)
@@ -343,4 +348,41 @@ object HandleCities {
 
         return cityWrapper
     }
+
+    fun getUpNextCity(segments: MutableList<MutableList<CityWrapper>>, currentPosition: ScreenCoordinate): CityWrapper? {
+        var cityWrapper: CityWrapper? = null
+        var currentSegmentIndex = CENTER_SEGMENT_INDEX
+
+        // Start searching upwards through the segments
+        while (cityWrapper == null && currentSegmentIndex > 0) {
+            segments[currentSegmentIndex].forEach {
+                val deltaY = currentPosition.y - it.screenCoordinate.y
+                if (deltaY > 0) {
+                    cityWrapper = it // Found the next city upwards
+                }
+            }
+            currentSegmentIndex--
+        }
+
+        return cityWrapper
+    }
+
+    fun getDownNextCity(segments: MutableList<MutableList<CityWrapper>>, currentPosition: ScreenCoordinate): CityWrapper? {
+        var cityWrapper: CityWrapper? = null
+        var currentSegmentIndex = CENTER_SEGMENT_INDEX
+
+        // Start searching downwards through the segments
+        while (cityWrapper == null && currentSegmentIndex < TOTAL_SEGMENTS - 1) {
+            segments[currentSegmentIndex].forEach {
+                val deltaY = it.screenCoordinate.y - currentPosition.y
+                if (deltaY > 0) {
+                    cityWrapper = it // Found the next city downwards
+                }
+            }
+            currentSegmentIndex++
+        }
+
+        return cityWrapper
+    }
+
 }

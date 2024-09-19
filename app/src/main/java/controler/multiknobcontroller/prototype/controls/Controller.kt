@@ -2,9 +2,12 @@ package controler.multiknobcontroller.prototype.controls
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.WindowManager
+import androidx.core.content.ContextCompat.startActivity
 import controler.multiknobcontroller.prototype.controls.actions.goBackPressed
 import controler.multiknobcontroller.prototype.controls.actions.navigateToHomeScreen
 import controler.multiknobcontroller.prototype.controls.actions.navigations.navigateDown
@@ -29,9 +32,9 @@ class Controller(private val context: Context, private val service: Accessibilit
     }
 
     private val gestureControls =
-        controler.multiknobcontroller.prototype.controls.GestureControls(service)
+        GestureControls(service)
 
-    val googleMapsControls = controler.multiknobcontroller.prototype.controls.GoogleMapsControls(
+    val googleMapsControls = GoogleMapsControls(
         nodeManager,
         gestureControls,
         displayMetrics,
@@ -39,33 +42,33 @@ class Controller(private val context: Context, private val service: Accessibilit
     )
 
     fun doNavigateUp() {
-        delayFunction<Unit>(controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Navigate Up"){
+        delayFunction<Unit>(0, nodeManager, "Navigate Up"){
             navigateUp(nodeManager)
         }.invoke(Unit)
     }
 
     fun doNavigateDown() {
-        delayFunction<Unit>(controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Navigate Down") {
+        delayFunction<Unit>(0, nodeManager, "Navigate Down") {
             navigateDown(nodeManager)
         }.invoke(Unit)
     }
 
     fun doNavigateLeft() {
-        delayFunction<Unit>(controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Navigate Left") {
+        delayFunction<Unit>(0, nodeManager, "Navigate Left") {
             navigateLeft(nodeManager, gestureControls)
         }.invoke(Unit)
     }
 
     fun doNavigateRight() {
-        delayFunction<Unit>(controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Navigate Right") {
+        delayFunction<Unit>(0, nodeManager, "Navigate Right") {
             navigateRight(nodeManager, gestureControls)
         }.invoke(Unit)
     }
 
     fun clickCurrentNode() {
         delayFunctionWithCallback(
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY,
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Clicked",{
+            0,
+            Navigation_DELAY, nodeManager, "Clicked",{
                 _: Unit -> nodeManager.clickCurrentNode()
         }){
             nodeManager.setupNodes()
@@ -74,8 +77,8 @@ class Controller(private val context: Context, private val service: Accessibilit
 
     fun goToHomeScreen() {
         delayFunctionWithCallback(
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY,
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Navigate to Home Screen",{
+            0,
+            Navigation_DELAY, nodeManager, "Navigate to Home Screen",{
                 _: Unit -> navigateToHomeScreen(service)
         }){
             nodeManager.setupNodes()
@@ -84,8 +87,8 @@ class Controller(private val context: Context, private val service: Accessibilit
 
     fun recentApps(){
         delayFunctionWithCallback(
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY,
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Open Recent Apps",{
+            Navigation_DELAY,
+            Navigation_DELAY, nodeManager, "Open Recent Apps",{
             _: Unit -> openRecentApps(service)
         }){
             nodeManager.setupNodes()
@@ -95,40 +98,48 @@ class Controller(private val context: Context, private val service: Accessibilit
 
     fun goBack() {
         delayFunctionWithCallback(
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY,
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Go Back",{
+            Navigation_DELAY,
+            Navigation_DELAY, nodeManager, "Go Back",{
                 _: Unit -> goBackPressed(service)
         }){
             nodeManager.setupNodes()
         }.invoke(Unit)
     }
 
-    fun openGoogleMaps(){
-        val packageName = "com.google.android.apps.maps"
+    fun startAppWithPackageName(packageName: String){
         delayFunctionWithCallback(
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY,
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Start Google Maps",{
-                _: Unit -> openAppWithPackageName(context, packageName)
-        }){
+            Navigation_DELAY,
+            Navigation_DELAY, nodeManager, packageName,{
+                    _: Unit ->
+                val launchIntent: Intent? =
+                    context.packageManager.getLaunchIntentForPackage(packageName)
+                launchIntent?.addCategory(Intent.CATEGORY_LAUNCHER);
+                if(launchIntent != null){
+                    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(launchIntent)
+                }
+            }){
             nodeManager.setupNodes()
         }.invoke(Unit)
     }
 
-    fun openSpotify(){
-        val packageName = "com.spotify.music"
+
+    fun startAppWithIntent(intent: Intent){
         delayFunctionWithCallback(
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY,
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Start Spotify",{
-                _: Unit -> openAppWithPackageName(context, packageName)
-        }){
+            Navigation_DELAY,
+            Navigation_DELAY, nodeManager, intent.toString(),{
+                    _: Unit ->
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+            }){
             nodeManager.setupNodes()
         }.invoke(Unit)
     }
 
     fun openAllApps(){
         delayFunctionWithCallback(
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY,
-            controler.multiknobcontroller.prototype.controls.Controller.Companion.Navigation_DELAY, nodeManager, "Open All Apps",{
+            Navigation_DELAY,
+            Navigation_DELAY, nodeManager, "Open All Apps",{
                 _: Unit -> openAllAppsScreen(service, nodeManager, gestureControls)
         }){
             nodeManager.setupNodes()

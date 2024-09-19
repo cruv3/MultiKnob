@@ -2,6 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <queries> <!-- name the required packages -->
+        <package android:name="com.google.android.apps.maps"/>
+        <package android:name="com.spotify.music"/>
+        <package android:name="com.google.android.youtube"/>
+        <package android:name="com.android.vending"/>
+    </queries>
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
@@ -46,7 +53,6 @@
         <service
             android:name=".prototype.service.AccessibilityService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
-            android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

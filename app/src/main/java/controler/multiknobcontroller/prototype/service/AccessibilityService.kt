@@ -1,12 +1,15 @@
 package controler.multiknobcontroller.prototype.service
 
 import android.accessibilityservice.AccessibilityService
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import controler.multiknobcontroller.prototype.controls.Controller
 import controler.multiknobcontroller.prototype.controls.NodeManager
+import controler.multiknobcontroller.prototype.controls.actions.openAppWithPackageName
 import controler.multiknobcontroller.utils.entities.AppPackage
 import controler.multiknobcontroller.utils.entities.GlobalState
 import controler.multiknobcontroller.utils.entities.Signal
@@ -19,16 +22,15 @@ class AccessibilityService : AccessibilityService(), BluetoothService.BluetoothD
     }
 
     private lateinit var nodeManager: NodeManager
-    private lateinit var controller: controler.multiknobcontroller.prototype.controls.Controller
+    private lateinit var controller: Controller
     private lateinit var bluetoothService: BluetoothService
-
 
     override fun onServiceConnected() {
         bluetoothService = BluetoothService(this, this)
         bluetoothService.startBluetoothScan("64:B7:08:29:37:8E")
 
         nodeManager = NodeManager(this)
-        controller = controler.multiknobcontroller.prototype.controls.Controller(
+        controller = Controller(
             this,
             this,
             nodeManager,
@@ -40,12 +42,16 @@ class AccessibilityService : AccessibilityService(), BluetoothService.BluetoothD
     override fun onSignalReceived(globalSignal: Signal.GlobalSignal) {
         when (globalSignal) {
             Signal.GlobalSignal.GO_BACK -> controller.goBack()
-            Signal.GlobalSignal.OPEN_GOOGLE_MAPS -> controller.openGoogleMaps()
-            Signal.GlobalSignal.OPEN_SPOTIFY -> controller.openSpotify()
             Signal.GlobalSignal.LEFT -> controller.doNavigateLeft()
             Signal.GlobalSignal.RIGHT -> controller.doNavigateRight()
             Signal.GlobalSignal.UP -> controller.doNavigateUp()
             Signal.GlobalSignal.DOWN -> controller.doNavigateDown()
+            Signal.GlobalSignal.OPEN_GOOGLE_MAPS -> controller.startAppWithPackageName( "com.google.android.apps.maps")
+            Signal.GlobalSignal.OPEN_SPOTIFY -> controller.startAppWithPackageName("com.spotify.music")
+            Signal.GlobalSignal.OPEN_YOUTUBE -> controller.startAppWithPackageName("com.google.android.youtube")
+            Signal.GlobalSignal.OPEN_PLAYSTORE -> controller.startAppWithPackageName("com.android.vending")
+            Signal.GlobalSignal.OPEN_TELEPHONE -> controller.startAppWithIntent(Intent(Intent.ACTION_DIAL))
+            Signal.GlobalSignal.OPEN_SETTINGS -> controller.startAppWithIntent(Intent(Settings.ACTION_SETTINGS))
         }
     }
 

@@ -55,12 +55,10 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.play.services.location)
     debugImplementation(libs.androidx.ui.tooling)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
     implementation(libs.androidx.appcompat)
     implementation(libs.mapBox)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.app)
     implementation(libs.mapbox.sdk.services)
     implementation(libs.maps.compose)
-
 }

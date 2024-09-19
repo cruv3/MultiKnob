@@ -4,6 +4,7 @@ import android.util.Log
 import controler.multiknobcontroller.utils.entities.MultiKnob
 import controler.multiknobcontroller.utils.entities.Signal
 import controler.multiknobcontroller.prototype.signals.SignalProcessor
+import controler.multiknobcontroller.utils.entities.GlobalState
 
 
 // Global
@@ -16,17 +17,19 @@ class RotateRightGoogleMaps(private val tag: String) {
     private val TAG = tag + TAG_PRESET
 
     fun rotateRightInteraction(multiKnob: MultiKnob, callback: SignalProcessor.SignalCallback){
-        if (multiKnob.rotation >= 25 && multiKnob.fingerCount == 5){
+        if(multiKnob.snapPoint != 1) return
+
+        if (multiKnob.fingerCount == 4){
             Log.d(TAG, "Zoom In")
             callback.onSignalReceived(Signal.GoogleMaps.ZOOM_IN)
         }
 
-        if (multiKnob.rotation >= 25 && multiKnob.fingerCount == 4){
+        if (multiKnob.fingerCount == 3){
             Log.d(TAG, "Move Right")
             callback.onSignalReceived(Signal.GoogleMaps.RIGHT)
         }
 
-        if (multiKnob.rotation >= 25 && multiKnob.fingerCount == 3){
+        if (multiKnob.fingerCount == 2){
             Log.d(TAG, "Move Up")
             callback.onSignalReceived(Signal.GoogleMaps.UP)
         }

@@ -8,7 +8,11 @@ enum class Signal {;
         DOWN,
         GO_BACK,
         OPEN_GOOGLE_MAPS,
-        OPEN_SPOTIFY;
+        OPEN_SPOTIFY,
+        OPEN_YOUTUBE,
+        OPEN_TELEPHONE,
+        OPEN_PLAYSTORE,
+        OPEN_SETTINGS;
         enum class ButtonSignal{
             SHORT_TAP,
             LONG_PRESS,
@@ -40,7 +44,10 @@ enum class StudieSignal{
     UP,
     DOWN,
     ZOOM_IN,
-    ZOOM_OUT;
+    ZOOM_OUT,
+    RIGHT_UP_CITY,
+    LEFT_DOWN_CITY;
+
     enum class ButtonSignal{
         SHORT_TAP,
         LONG_PRESS,

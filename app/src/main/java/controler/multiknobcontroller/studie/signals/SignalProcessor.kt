@@ -13,8 +13,6 @@ class SignalProcessor(private val context: Context, private val callback: Signal
         private const val LONG_PRESS_THRESHOLD = 1000L // 1 second
     }
 
-    private var recentApp : AppPackage? = null
-
     interface SignalCallback{
         fun onSignalReceived(signal: StudieSignal)
         fun onSignalReceived(signal: StudieSignal.ButtonSignal)
